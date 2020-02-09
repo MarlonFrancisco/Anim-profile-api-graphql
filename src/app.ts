@@ -4,9 +4,11 @@ import schema from "./graphql/schema";
 import Context from "./repository/context";
 import "dotenv/config";
 import { extractJwt } from "./middlewares/extract.jwt";
+import { Ast } from "./graphql/ast";
 
 class App {
     public app: express.Application;
+
     constructor() {
         this.app = express();
         this.configs();
@@ -18,7 +20,7 @@ class App {
             "/graphql",
             extractJwt(),
             (req: Request & { context: any }, res: Response, next: NextFunction) => {
-                req.context.User = Context.User;
+                req.context = { ...req.context, ...Context};
                 next();
             },
             graphqlHTTP((req: Request & {context: any} ) => ({

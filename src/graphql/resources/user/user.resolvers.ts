@@ -1,16 +1,20 @@
-import { UserDto } from "../../../dto/UserDto";
+
 import { IContext } from "../../../repository/context";
 import { composer } from "../../composable/composable.resolvers";
 import { Auth } from "../../composable/auth.resolver";
+import { GraphQLResolveInfo } from "graphql";
+import { Ast } from "../../ast";
+import { UserDto } from "../../../shared/dto/UserDto";
+import { Fields } from "../../composable/fields.resolver";
 
 
 export const userResolvers = {
     Query: {
-        getUsers: composer(Auth)((parent: any, {}, { User }: IContext) => {
-            return User.findAll();
+        getUsers: composer(Auth, Fields)((parent: any, args, { User }: IContext, info: GraphQLResolveInfo) => {
+            return User.findAll(args.fields);
         }),
-        getUser: composer(Auth)(async (parent: any, { id }: {id: string}, { User }: IContext ) => {
-            return await User.findById(id);
+        getUser: composer(Auth, Fields)((parent: any, { id, fields }, { User }: IContext, info: GraphQLResolveInfo) => {
+            return User.findById(id, fields);
         })
     },
     Mutation: {
@@ -18,8 +22,8 @@ export const userResolvers = {
             const entity = UserDto.fromBody(args.input);
             return User.save(entity);
         },
-        deleteUser: composer(Auth)((parent: any, { id }: { id: string }, { User }: IContext) => {
-            return User.delete(id);
+        deleteUser: composer(Auth, Fields)((parent: any, { id, fields }, { User }: IContext) => {
+            return User.delete(id, fields);
         }),
         userUpdate: composer(Auth)((parent: any, args: any, { User }: IContext) => {
             const entity = UserDto.fromBody(args.input);
