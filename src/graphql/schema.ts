@@ -6,9 +6,12 @@ import { postTypes } from "./resources/post/post.schema";
 import { commentTypes } from "./resources/comment/comment.schema";
 import { merge } from "lodash";
 import { userResolvers } from "./resources/user/user.resolvers";
+import { tokenResolvers } from "./resources/token/token.resolvers";
+import { tokenTypes } from "./resources/token/token.schema";
 
 const resolvers = merge(
     userResolvers,
+    tokenResolvers
 );
 
 const SchemaDefinition = `
@@ -23,6 +26,7 @@ export default makeExecutableSchema({
         SchemaDefinition,
         Query,
         Mutation,
+        tokenTypes,
         userTypes,
     ],
     resolvers

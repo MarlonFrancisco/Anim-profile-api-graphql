@@ -1,13 +1,6 @@
 const userTypes = `
-    input UserInput {
-        id: ID
-        name: String
-        email: String
-        photo: String
-    }
-    
     type User {
-        id: ID
+        _id: ID
         name: String
         email: String
         photo: String
@@ -29,18 +22,14 @@ const userTypes = `
 
 const userQueries = `
     getUsers: [ User! ]
-    getUser(id: ID!): User
+    getUser: User
 `;
 
 const userMutations = `
     userCreate(input: UserCreateInput): User!
-    userUpdate(id: ID!, input: UserUpdateInput): User!
-    userUpdatePassword(id: ID!, password: String!): User!
-    deleteUser(id: ID!): User!
+    userUpdate(input: UserUpdateInput): User!
+    userUpdatePassword(password: String!): User!
+    deleteUser: User!
 `;
 
-export {
-    userQueries,
-    userMutations,
-    userTypes
-};
+export { userQueries, userMutations, userTypes };

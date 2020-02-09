@@ -22,6 +22,10 @@ export class UserRepository extends MongoRepository<IUserModel, UserDto> {
         return User.find().exec();
     }
 
+    public find(params: any) {
+        return User.findOne(params).exec();
+    }
+
     public delete(id: string) {
         return User.findByIdAndDelete(id).exec();
     }
@@ -33,4 +37,5 @@ export class UserRepository extends MongoRepository<IUserModel, UserDto> {
             }
         }).exec();
     }
+
 }

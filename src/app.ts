@@ -3,6 +3,7 @@ import graphqlHTTP from "express-graphql";
 import schema from "./graphql/schema";
 import Context from "./repository/context";
 import "dotenv/config";
+import { extractJwt } from "./middlewares/extract.jwt";
 
 class App {
     public app: express.Application;
@@ -15,15 +16,16 @@ class App {
     private middlewares(): void {
         this.app.use(
             "/graphql",
+            extractJwt(),
             (req: Request & { context: any }, res: Response, next: NextFunction) => {
-                req.context = Context;
+                req.context.User = Context.User;
                 next();
             },
-            graphqlHTTP({
+            graphqlHTTP((req: Request & {context: any} ) => ({
                 schema,
                 graphiql: process.env.NODE_ENV === "development",
-                context: Context
-            }),
+                context: req.context
+            })),
         );
     }
 

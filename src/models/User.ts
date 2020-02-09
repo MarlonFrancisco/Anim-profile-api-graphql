@@ -15,6 +15,7 @@ const schema = new mongo.Schema({
     password: {
         type: String,
         required: true,
+        select: false
     },
     photo: String,
 });
